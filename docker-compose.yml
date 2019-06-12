@@ -1,0 +1,40 @@
+version: "3.7"
+
+services:
+  elasticsearch:
+    container_name: ast-elasticsearch
+    image: elasticsearch:7.1.1
+    # hostname: ast-elasticsearch
+    restart: always
+    ports:
+      - 9200:9200
+    volumes:
+      - ./.elastic_data:/usr/share/elasticsearch/data
+    networks:
+      - ast_elk
+
+  kibana:
+    container_name: ast-kibana
+    image: kibana:7.1.1
+    # hostname: ast-kibana
+    restart: always
+    ports:
+      - 5601:5601
+    networks:
+      - ast_elk
+    depends_on:
+      - elasticsearch
+
+  logstash:
+    container_name: ast-logstash
+    image: logstash:7.1.1
+    # hostname: ast-kibana
+    restart: always
+    networks:
+      - ast_elk
+    depends_on:
+      - elasticsearch
+
+networks:
+  ast_elk:
+    driver: bridge
