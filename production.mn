@@ -1,0 +1,11 @@
+### check ulimit
+docker run --rm centos:7 /bin/bash -c 'ulimit -Hn && ulimit -Sn && ulimit -Hu && ulimit -Su'
+
+### increate ulimit to 65535 before starting docker commands
+ulimit -n 65535
+
+### check kernel virtual memory
+sysctl vm.max_map_count
+
+### set at least 262144
+sysctl -w vm.max_map_count=262144
