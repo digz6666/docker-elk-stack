@@ -9,7 +9,8 @@ services:
     restart: always
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
-      - ./.elastic_data:/usr/share/elasticsearch/data
+      #- ./.es_data:/usr/share/elasticsearch/data
+      - es_data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
     environment:
@@ -51,6 +52,10 @@ services:
       - ast-elk
     depends_on:
       - elasticsearch
+
+# use docker volume to persist ES data outside of a container.
+volumes:
+  es_data:
 
 networks:
   ast-elk:

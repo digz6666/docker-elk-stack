@@ -1,3 +1,8 @@
+### create elastic data dir and set permission
+mkdir .es_data
+chmod g+rwx .es_data
+chgrp 1000 .es_data
+
 ### build images
 docker build -t ast-elasticsearch -f elasticsearch/Dockerfile .
 docker build -t ast-logstash -f logstash/Dockerfile .
