@@ -3,7 +3,8 @@ version: "3.7"
 services:
   elasticsearch:
     container_name: ast-elasticsearch
-    image: ast-elasticsearch:7.1.1
+    image: ast-elasticsearch:latest
+    # image: elasticsearch:7.1.1
     # hostname: ast-elasticsearch
     restart: always
     volumes:
@@ -15,12 +16,13 @@ services:
       ES_JAVA_OPTS: "-Xmx256m -Xms256m"
       ELASTIC_PASSWORD: ast_elastic
     networks:
-      - ast_elk
+      - ast-elk
 
   logstash:
     container_name: ast-logstash
-    image: logstash:7.1.1
-    # hostname: ast-kibana
+    image: ast-logstash:latest
+    # image: logstash:7.1.1
+    # hostname: ast-logstash
     restart: always
     volumes:
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
@@ -31,13 +33,14 @@ services:
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
-      - ast_elk
+      - ast-elk
     depends_on:
       - elasticsearch
 
   kibana:
     container_name: ast-kibana
-    image: kibana:7.1.1
+    image: ast-kibana:latest
+    # image: kibana:7.1.1
     # hostname: ast-kibana
     restart: always
     volumes:
@@ -45,10 +48,10 @@ services:
     ports:
       - 5601:5601
     networks:
-      - ast_elk
+      - ast-elk
     depends_on:
       - elasticsearch
 
 networks:
-  ast_elk:
+  ast-elk:
     driver: bridge
