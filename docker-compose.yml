@@ -4,7 +4,7 @@ services:
   elasticsearch:
     container_name: ast-elasticsearch
     image: ast-elasticsearch:latest
-    # image: elasticsearch:7.1.1
+    # image: elasticsearch:7.2.0
     # hostname: ast-elasticsearch
     restart: always
     volumes:
@@ -14,7 +14,7 @@ services:
     ports:
       - 9200:9200
     environment:
-      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ES_JAVA_OPTS: "-Xms256m -Xmx256m"
       ELASTIC_PASSWORD: ast_elastic
     networks:
       - ast-elk
@@ -24,10 +24,32 @@ services:
         max-file: "5"
         max-size: 10m
 
+  apm:
+    container_name: ast-apm
+    image: ast-apm:latest
+    # image: apm-server:7.2.0
+    # hostname: ast-apm
+    restart: always
+    volumes:
+      - ./apm/config/apm-server.yml:/etc/apm-server/apm-server.yml:ro
+    ports:
+      - 8200:8200 # tcp
+    environment:
+      LS_JAVA_OPTS: "-Xms256m -Xmx256m"
+    networks:
+      - ast-elk
+    depends_on:
+      - elasticsearch
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: 10m
+
   logstash:
     container_name: ast-logstash
     image: ast-logstash:latest
-    # image: logstash:7.1.1
+    # image: logstash:7.2.0
     # hostname: ast-logstash
     restart: always
     volumes:
@@ -38,7 +60,7 @@ services:
       # - 9600:9600 # API port
       # - 12201:12201 # gelf
     environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+      LS_JAVA_OPTS: "-Xms256m -Xmx256m"
     networks:
       - ast-elk
     depends_on:
@@ -52,7 +74,7 @@ services:
   kibana:
     container_name: ast-kibana
     image: ast-kibana:latest
-    # image: kibana:7.1.1
+    # image: kibana:7.2.0
     # hostname: ast-kibana
     restart: always
     volumes:
